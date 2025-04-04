@@ -131,6 +131,7 @@ registerFunctions([
 
 export { Design } from './component/design';
 export { Preview } from './component/preview';
+export type { PreviewRef } from './component/preview';
 export { PreviewComponentProvider, } from "./hoc/previewComponentHoc";
 export { DesignComponentProvider } from "./hoc/designComponentHoc";
 export { FunctionProvider } from "./hoc/functionHoc";

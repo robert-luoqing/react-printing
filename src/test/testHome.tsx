@@ -21,7 +21,6 @@ export const TestHome = () => {
   }
 
   return <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-
     <div style={{ flex: 1 }}>
       <Design onLayoutChanged={onLayoutChanged} layout={rootElement} />
     </div>
