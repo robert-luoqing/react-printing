@@ -1,5 +1,4 @@
 import React from "react";
-import { useCallback } from "react";
 import { ContainerSetting } from "../../common/containerSetting";
 import { ImageModel } from "./imageDesign";
 import { TextSettingItem } from "../../common/items/textSettingItem";

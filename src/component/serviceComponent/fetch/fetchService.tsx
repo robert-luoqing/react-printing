@@ -4,7 +4,6 @@ import { ComponentPreviewProps } from "../../common/containerPreview";
 import { objUtil } from "../../../utils/objUtil";
 import { isNil } from "lodash";
 import { FetchServiceModel } from "./fetchDesign";
-import { usePrevious } from "@uidotdev/usehooks";
 
 export interface FetchServiceProps extends ComponentPreviewProps {
   children?: undefined;
@@ -15,6 +14,17 @@ export interface FetchServiceProps extends ComponentPreviewProps {
     forData: Array<{ forItemName: string; forItemData: any }>
   ) => void;
 }
+
+function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T | undefined>(undefined);
+
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+
+  return ref.current ;
+}
+
 export const FetchService = (props: FetchServiceProps) => {
   const [loading, setLoading] = useState(false);
   const elementData = props.elementData as FetchServiceModel;
@@ -60,6 +70,7 @@ export const FetchService = (props: FetchServiceProps) => {
   }, [elementData.propPathOnChange, props.data, props.forData]);
 
   const prevUrl = usePrevious(url);
+
   const firedRef = useRef(false);
   const prevOnChangeData = useRef<any>(null);
   useEffect(() => {

@@ -3,7 +3,7 @@ import { PositionModel } from "../../models/positionModel";
 import { positionUtil } from "../../utils/positionUtil";
 import { unitUtil } from "../../utils/unitUtil";
 import { isNil, omitBy } from "lodash";
-import styles from '../style.module.css';
+import styles from "../style.module.css";
 import classNames from "classnames";
 
 export interface ContainerModel {
@@ -97,20 +97,22 @@ export const Container = (props: ContainerProps) => {
         widthRef.current = width;
         heightRef.current = height;
         if (isResizing.current) {
-          props.onSizeChanged?.(
-            props.rawData,
-            {
-              width:
-                props.resize === "both" || props.resize === "horizontal"
-                  ? width
-                  : undefined,
-              height:
-                props.resize === "both" || props.resize === "vertical"
-                  ? height
-                  : undefined,
-            },
-            props.parentData
-          );
+          requestAnimationFrame(() => {
+            props.onSizeChanged?.(
+              props.rawData,
+              {
+                width:
+                  props.resize === "both" || props.resize === "horizontal"
+                    ? width
+                    : undefined,
+                height:
+                  props.resize === "both" || props.resize === "vertical"
+                    ? height
+                    : undefined,
+              },
+              props.parentData
+            );
+          });
         }
       }
     });
@@ -251,17 +253,34 @@ export const Container = (props: ContainerProps) => {
         minHeight: 15,
       }}
     >
-      <div className={classNames(styles.wFull, styles.hFull, styles.relative, styles.overflowHidden)}>
+      <div
+        className={classNames(
+          styles.wFull,
+          styles.hFull,
+          styles.relative,
+          styles.overflowHidden
+        )}
+      >
         <div
-          className={classNames(styles.wFull, styles.hFull, styles.relative, styles.overflowHidden)}
+          className={classNames(
+            styles.wFull,
+            styles.hFull,
+            styles.relative,
+            styles.overflowHidden
+          )}
           style={omitBy(innerStyle, isNil)}
         >
           {props.children}
         </div>
 
         <div
-          style={{ inset: 0, pointerEvents: 'none', position: 'absolute', background: props.selected ? '#00000010' : undefined, border: props.selected ? '2px dashed #777' : '0.6px dotted #666' }}
-
+          style={{
+            inset: 0,
+            pointerEvents: "none",
+            position: "absolute",
+            background: props.selected ? "#00000010" : undefined,
+            border: props.selected ? "2px dashed #777" : "0.6px dotted #666",
+          }}
         ></div>
       </div>
     </div>

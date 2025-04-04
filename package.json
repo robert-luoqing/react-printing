@@ -1,6 +1,6 @@
 {
   "name": "react-layout-printing",
-  "version": "1.0.4",
+  "version": "1.0.8",
   "main": "dist/cjs/printing.js",
   "module": "dist/esm/printing.js",
   "types": "dist/index.d.ts",
@@ -9,20 +9,14 @@
     "require": "./dist/cjs/printing.js"
   },
   "dependencies": {
-    "@uidotdev/usehooks": "^2.4.1",
-    "antd": "^5.23.0",
     "classnames": "^2.5.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
     "lodash": "^4.17.21",
-    "react": "^17 || ^18 || ^19",
-    "react-dnd": "^16.0.1",
-    "react-dom": "^17 || ^18 || ^19",
-    "react-rnd": "^10.4.14",
     "uuid": "^11.0.3"
   },
   "scripts": {
-    "start": "cross-env PORT=3075 react-scripts start",
+    "start": "cross-env PORT=3049 react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "clean": "rimraf dist",
@@ -55,29 +49,24 @@
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.10.2",
-    "@types/react": "^19.0.2",
-    "@types/react-dom": "^19.0.2",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "cross-env": "^7.0.3",
     "react-scripts": "5.0.1",
     "rimraf": "^6.0.1",
     "rollup": "^4.39.0",
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-postcss": "^4.0.2",
-    "tsup": "^8.4.0",
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "react": "^17 || ^18 || ^19",
-    "react-dom": "^17 || ^18 || ^19"
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
   },
   "license": "MIT",
+  "author": "Robert",
   "repository": {
     "type": "git",
     "url": "https://github.com/robert-luoqing/react-printing.git"
-  },
-  "author": "Your Name",
-  "bugs": {
-    "url": "https://github.com/robert-luoqing/react-printing/issues"
-  },
-  "homepage": "https://github.com/robert-luoqing/react-printing#readme"
+  }
 }

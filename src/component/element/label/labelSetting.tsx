@@ -1,5 +1,4 @@
 import React from "react";
-import { useCallback } from "react";
 import { ContainerSetting } from "../../common/containerSetting";
 import { LabelModel } from "./labelDesign";
 import { TextSettingItem } from "../../common/items/textSettingItem";
@@ -12,20 +11,6 @@ export interface LabelSettingProps {
 }
 
 export const LabelSetting = (props: LabelSettingProps) => {
-  const onTextChange = useCallback(
-    (event: any) => {
-      const value = event.target.value;
-      const tag = event.target.getAttribute("data-tag");
-      props.onChange(tag, value);
-    },
-    [props]
-  );
-  const onSelectChange = useCallback(
-    (tag: string, value: any) => {
-      props.onChange(tag, value);
-    },
-    [props]
-  );
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <ContainerSetting

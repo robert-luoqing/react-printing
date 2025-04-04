@@ -31,15 +31,15 @@ const config = [{
     strip({ directives: ["use client"] }),
     babel({ babelHelpers: "bundled" }),
     resolve({
-      browser: true, // 让 Rollup 解析 browser 版本的包
-      preferBuiltins: false, // 避免使用 Node.js 内置模块
+      browser: true, 
+      preferBuiltins: false, 
     }),
     commonjs({
       transformMixedEsModules: true,
     }),
-    typescript({ tsconfig: './tsconfig.json' }),  // Use TypeScript plugin for Rollup
+    typescript({ tsconfig: './tsconfig.json' }), 
   ],
-  external: ['react', 'react-dom'],  // Externalize React and ReactDOM (not bundled with your library)
+  external: ['react', 'react-dom'], 
 },  {
   input: 'src/printing.ts',
   output: {
@@ -47,6 +47,7 @@ const config = [{
     format: 'es',
   },
   plugins: [dts()],
+  external: ['react', 'react-dom'], 
 }];
 
 export default config;

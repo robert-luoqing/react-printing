@@ -6,13 +6,8 @@ import { LabelButton } from "../component/element/label/labelButton";
 import { DivContainerButton } from "../component/container/divContainer/divContainerButton";
 import { DivContainerSetting } from "../component/container/divContainer/divContainerSetting";
 import { LabelSetting } from "../component/element/label/labelSetting";
-import { InputDesign } from "../component/element/input/inputDesign";
-import { InputSetting } from "../component/element/input/inputSetting";
-import { InputButton } from "../component/element/input/inputButton";
 import { DivContainerPreview } from "../component/container/divContainer/divContainerPreview";
 import { LabelPreview } from "../component/element/label/labelPreview";
-import { InputPreview } from "../component/element/input/inputPreview";
-import { Design } from "../component/design";
 import {
   PreviewComponentProvider,
   registerPreviewComponents,
@@ -21,15 +16,7 @@ import {
   DesignComponentProvider,
   registerDesignComponents,
 } from "../hoc/designComponentHoc";
-import { ButtonDesign } from "../component/element/button/buttonDesign";
-import { ButtonButton } from "../component/element/button/buttonButton";
-import { ButtonSetting } from "../component/element/button/buttonSetting";
-import { ButtonPreview } from "../component/element/button/buttonPreview";
 import { FunctionProvider, registerFunctions } from "../hoc/functionHoc";
-import { FetchDesign } from "../component/serviceComponent/fetch/fetchDesign";
-import { FetchSetting } from "../component/serviceComponent/fetch/fetchSetting";
-import { FetchService } from "../component/serviceComponent/fetch/fetchService";
-import { FetchButton } from "../component/serviceComponent/fetch/fetchButton";
 import { ImageSetting } from "../component/element/image/imageSetting";
 import { ImagePreview } from "../component/element/image/imagePreview";
 import { ImageButton } from "../component/element/image/imageButton";
