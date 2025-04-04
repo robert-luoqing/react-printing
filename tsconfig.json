@@ -1,0 +1,42 @@
+// {
+//   "compilerOptions": {
+//     "target": "esnext",  // Use ESNext features for the output
+//     "module": "esnext",  // Use ESNext module system
+//     "moduleResolution": "node",  // Use Node module resolution
+//     "jsx": "react",  // Use React JSX
+//     "declaration": true,  // Generate type declarations (.d.ts)
+//     "declarationDir": "./dist",  // Output declaration files to 'dist'
+//     "strict": true,  // Enable strict type-checking options
+//     "skipLibCheck": true,  // Skip checking of all declaration files
+//     "esModuleInterop": true  // Allow default imports from modules without defaul
+//   },
+//   "include": ["src/**/*"],  // Include all files in the 'src' directory
+//   "exclude": ["node_modules", "dist"]  // Exclude 'node_modules' and 'dist' directories
+// }
+
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src"
+  ]
+}

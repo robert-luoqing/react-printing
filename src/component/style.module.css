@@ -1,0 +1,33 @@
+.wFull {
+  width: 100%;
+}
+.hFull {
+  height: 100%;
+}
+
+.resize {
+  resize: both;
+}
+
+.overflowAuto {
+  overflow: auto;
+}
+
+.relative {
+  position: relative;
+} 
+
+.overflowHidden {
+  overflow: hidden;
+}
+
+.designContainer {
+  :global(div) {
+    box-sizing: border-box;
+  }
+}
+.previewContainer {
+  :global(div) {
+    box-sizing: border-box;
+  }
+}
