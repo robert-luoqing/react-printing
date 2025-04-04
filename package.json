@@ -1,6 +1,6 @@
 {
   "name": "react-layout-printing",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/cjs/printing.js",
   "module": "dist/esm/printing.js",
   "types": "dist/index.d.ts",
