@@ -12,9 +12,14 @@ export const MySelect: React.FC<MySelectProps> = ({ value, onChange, items = [],
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(event.target.value);
   };
-
+  const newStyle = {
+    height: '34px',
+    border: '1px solid rgb(118, 118, 118)',
+    borderRadius: 2,
+    ...style,
+  }
   return (
-    <select className={className} style={{height: '34px', ...style}} value={value} onChange={handleChange}>
+    <select className={className} style={newStyle} value={value || ''} onChange={handleChange}>
       {items.map((item) => (
         <option key={item.value} value={item.value}>
           {item.label}

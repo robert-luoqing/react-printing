@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useMemo } from 'react';
+import React, { forwardRef, useImperativeHandle, useMemo } from "react";
 import { useEffect, useRef, useState } from "react";
 import { objUtil } from "../utils/objUtil";
 import { isNil } from "lodash";
@@ -8,8 +8,8 @@ import { useFunctions } from "../hoc/functionHoc";
 import { FuncModel } from "./element/button/buttonDesign";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import styles from './style.module.css';
-import { DivContainerModel } from './container/divContainer/divContainer';
+import styles from "./style.module.css";
+import { DivContainerModel } from "./container/divContainer/divContainer";
 
 export interface PreviewProps {
   layout: DivContainerModel;
@@ -24,7 +24,7 @@ export interface PreviewRef {
   print: () => Promise<void>; // 定义要暴露的方法
 }
 
-export const Preview =  forwardRef<PreviewRef, PreviewProps>((props, ref) => {
+export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
   const { componentsMap: uiElementsMap } = usePreviewComponents();
 
   const [data, setData] = useState<any>({});
@@ -185,15 +185,14 @@ export const Preview =  forwardRef<PreviewRef, PreviewProps>((props, ref) => {
       const width = rect.width;
       const height = rect.height;
 
-      const canvas = await html2canvas(content, { scale: 1 });
+      const canvas = await html2canvas(content, { scale: 2 });
       const image = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("l", "px", [width, height]);
+      const pdf = new jsPDF(width > height ? "l" : "p", "px", [width, height]);
       pdf.addImage(image, "PNG", 0, 0, width, height);
 
       // const page2 = pdf.addPage([width, height], "l");
       // page2.addImage(image, "PNG", 0, 0, width, height);
-      
-      
+
       // pdf.save("generated.pdf");
       pdf.autoPrint();
 
@@ -226,24 +225,42 @@ export const Preview =  forwardRef<PreviewRef, PreviewProps>((props, ref) => {
   useImperativeHandle(ref, () => ({
     print: async () => {
       await onPrint();
-    }
+    },
   }));
 
-  const previewLayout = useMemo(()=> {
-    const layout = {...props.layout};
+  const previewLayout = useMemo(() => {
+    const layout = { ...props.layout };
     layout.border = undefined;
     return layout;
-  }, [props.layout])
+  }, [props.layout]);
 
   return (
-    <div style={{ width: '100%', height: '100%' }} className={styles.previewContainer}>
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%' }}>
+    <div
+      style={{ width: "100%", height: "100%" }}
+      className={styles.previewContainer}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+        }}
+      >
         <div
-          style={{ flex: 1, width: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'center' }}
-          
+          style={{
+            flex: 1,
+            width: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100%",
+            justifyContent: "center",
+          }}
         >
-          <div  style={{display: 'inline-block' }} ref={printElement}>
-          {renderByData(previewLayout, [])}
+          <div style={{ display: "inline-block" }} ref={printElement}>
+            {renderByData(previewLayout, [])}
           </div>
         </div>
       </div>

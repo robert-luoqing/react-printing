@@ -11,7 +11,9 @@ export interface MyInputProps {
 export const MyInput = (props: MyInputProps)=> {
   const style = {
     height: '28px',
+    border: '1px solid rgb(118, 118, 118)',
+    borderRadius: 2,
     ...props.style,
   }
-  return <input value={props.value} className={props.className} onChange={props.onChange} style={style} type={props.type} />;
+  return <input value={props.value || ''} className={props.className} onChange={props.onChange} style={style} type={props.type} />;
 }

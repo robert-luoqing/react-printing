@@ -5,7 +5,8 @@ import { PositionModel } from "../models/positionModel";
 import { ContainerModel } from "./common/containerDesign";
 import { arrayUtil } from "../utils/arrayUtil";
 import { useDesignComponents } from "../hoc/designComponentHoc";
-import styles from './style.module.css';
+import styles from "./style.module.css";
+import { RootSetting } from "./rootSetting";
 
 function replaceData(
   oldData: any,
@@ -234,6 +235,16 @@ export const Design = (props: PrintingDesignProps) => {
     props.onLayoutChanged?.(newRootElement);
   };
 
+  const onRootSettingChanged = (key: string, value: any) => {
+    const newRootElement = {
+      ...rootElement,
+      [key]: value,
+    };
+
+    setRootElement(newRootElement);
+    props.onLayoutChanged?.(newRootElement);
+  };
+
   const removeFromId = (
     id: string,
     currElement: Partial<{
@@ -282,8 +293,9 @@ export const Design = (props: PrintingDesignProps) => {
           onDelete={onComponentDeleted}
         />
       );
+    } else {
+      return <RootSetting data={rootElement} onChange={onRootSettingChanged} />;
     }
-    return null;
   };
 
   const renderButtons = () => {
@@ -295,15 +307,62 @@ export const Design = (props: PrintingDesignProps) => {
   };
 
   return (
-    <div style={{ width: '100%', height: '100%' }} className={styles.designContainer}>
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%' }}>
-        <div style={{ width: '200px', height: '100%', borderRight: '1px solid gray', paddingTop: 28, paddingLeft: 16, paddingRight: 16, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div
+      style={{ width: "100%", height: "100%" }}
+      className={styles.designContainer}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <div
+          style={{
+            width: "200px",
+            height: "100%",
+            borderRight: "1px solid gray",
+            paddingTop: 28,
+            paddingLeft: 16,
+            paddingRight: 16,
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+        >
           {renderButtons()}
         </div>
-        <div style={{ flex: 1, width: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'center', overflow: 'auto' }}>
+        <div
+          style={{
+            flex: 1,
+            width: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100%",
+            justifyContent: "center",
+            overflow: "auto",
+          }}
+        >
           <div>{renderByData(rootElement, null)}</div>
         </div>
-        <div style={{ width: '300px', height: '100%', borderLeft: '1px solid gray', paddingTop: 28, paddingLeft: 16, paddingRight: 16, display: 'flex', flexDirection: 'column', gap: '8px', overflow: 'auto' }}>
+        <div
+          style={{
+            width: "300px",
+            height: "100%",
+            borderLeft: "1px solid gray",
+            paddingTop: 28,
+            paddingLeft: 16,
+            paddingRight: 16,
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            overflow: "auto",
+          }}
+        >
           <div>{renderSetting()}</div>
         </div>
       </div>
