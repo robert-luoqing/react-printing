@@ -428,7 +428,7 @@ export const TestHome = () => {
         flexDirection: "column",
       }}
     >
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, height: 0 }}>
         <Design onLayoutChanged={onLayoutChanged} layout={rootElement} />
       </div>
       <div style={{ width: "100%", textAlign: "center", padding: 20 }}>

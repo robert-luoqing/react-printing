@@ -212,6 +212,8 @@ export const TestPreview = (props: TestPreviewProps) => {
           data={testData}
           dataLoadPolicy="LoadOnce"
           localFuncs={localFuncs}
+          itemPropertyField="items"
+          pageMaxItemCount={4}
         />
         {/* </div> */}
       </div>

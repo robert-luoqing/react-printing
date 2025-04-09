@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useMemo } from "react";
 import { useEffect, useRef, useState } from "react";
 import { objUtil } from "../utils/objUtil";
-import { isNil } from "lodash";
+import { chunk, isNil } from "lodash";
 import { funcUtil } from "../utils/funcUtil";
 import { usePreviewComponents } from "../hoc/previewComponentHoc";
 import { useFunctions } from "../hoc/functionHoc";
@@ -18,6 +18,8 @@ export interface PreviewProps {
   localFuncs?: {
     [name: string]: (context: any, param: any) => Promise<any> | void;
   };
+  pageMaxItemCount?: number;
+  itemPropertyField?: string;
 }
 
 export interface PreviewRef {
@@ -27,27 +29,54 @@ export interface PreviewRef {
 export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
   const { componentsMap: uiElementsMap } = usePreviewComponents();
 
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<any[]>([{}]);
 
   const initializeData = props.data;
   const dataLoadPolicy = props.dataLoadPolicy;
   const prevInitializeData = useRef<any>(null);
 
   useEffect(() => {
+    const splitData = (bindData: any) => {
+      if (
+        props.itemPropertyField &&
+        bindData[props.itemPropertyField] &&
+        props.pageMaxItemCount
+      ) {
+        const chunkItems = chunk(
+          bindData[props.itemPropertyField],
+          props.pageMaxItemCount
+        );
+        const newData = [];
+        for (const chunkItem of chunkItems) {
+          newData.push({
+            ...bindData,
+            [props.itemPropertyField]: chunkItem,
+          });
+        }
+        setData(newData);
+      } else {
+        setData([bindData]);
+      }
+    };
     const prevData = prevInitializeData.current;
     if (prevData !== initializeData) {
       prevInitializeData.current = initializeData;
     }
     if (dataLoadPolicy === "LoadOnChange") {
       if (prevData !== initializeData) {
-        setData(initializeData);
+        splitData(initializeData);
       }
     } else {
       if (prevData === null) {
-        setData(initializeData);
+        splitData(initializeData);
       }
     }
-  }, [dataLoadPolicy, initializeData]);
+  }, [
+    dataLoadPolicy,
+    initializeData,
+    props.itemPropertyField,
+    props.pageMaxItemCount,
+  ]);
 
   const onInputChange = (
     val: any,
@@ -108,31 +137,32 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
   };
 
   const renderByData = (
-    elementData: any,
+    layoutObj: DivContainerModel,
+    bindData: any,
     forData: Array<{ forItemName: string; forItemData: any }>
   ) => {
-    if (!elementData) {
+    if (!layoutObj) {
       return null;
     }
-    if (elementData.validOnDesign) {
+    if (layoutObj.validOnDesign) {
       return null;
     }
-    if (elementData.if) {
-      const context = { ...data };
+    if (layoutObj.if) {
+      const context = { ...bindData };
       for (const item of forData) {
         context[item.forItemName] = item.forItemData;
       }
-      const result = funcUtil.evaluateCondition(elementData.if, context);
+      const result = funcUtil.evaluateCondition(layoutObj.if, context);
       if (!result) {
         return null;
       }
     }
 
-    if (elementData.forPath && elementData.forItemName) {
+    if (layoutObj.forPath && layoutObj.forItemName) {
       const forListData = objUtil.getPropFromDataAndForData(
-        data,
+        bindData,
         forData,
-        elementData.forPath
+        layoutObj.forPath
       );
       if (isNil(forListData) || !forListData.map) {
         return null;
@@ -141,34 +171,35 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
       return forListData.map((item: any, index: number) => {
         const newForData = [
           ...forData,
-          { forItemName: elementData.forItemName, forItemData: item },
+          { forItemName: layoutObj.forItemName || "", forItemData: item },
         ];
-        return renderElement(elementData, newForData, index);
+        return renderElement(layoutObj, bindData, newForData, index);
       });
     }
 
-    return renderElement(elementData, forData);
+    return renderElement(layoutObj, bindData, forData);
   };
 
   const renderElement = (
-    elementData: any,
+    layoutObj: DivContainerModel,
+    bindData: any,
     forData: Array<{ forItemName: string; forItemData: any }>,
     index?: number
   ) => {
-    const PreviewElement = uiElementsMap[elementData.type]?.previewComponent;
+    const PreviewElement = uiElementsMap[layoutObj.type]?.previewComponent;
     if (PreviewElement) {
       return (
         <PreviewElement
-          key={elementData.id + "-" + index}
-          rawElementData={elementData}
-          elementData={elementData}
-          data={data}
+          key={layoutObj.id + "-" + index}
+          rawElementData={layoutObj}
+          elementData={layoutObj}
+          data={bindData}
           forData={[...forData]}
           onChange={onInputChange}
           onClick={onClick}
         >
-          {elementData.children?.map((item: any) =>
-            renderByData(item, forData)
+          {layoutObj.children?.map((item: any) =>
+            renderByData(item, bindData, forData)
           )}
         </PreviewElement>
       );
@@ -177,37 +208,48 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
     return null;
   };
 
-  const printElement = useRef<HTMLDivElement>(null);
+  const printElements = useRef<Array<HTMLDivElement | null>>([]);
   const onPrint = async () => {
-    const content = printElement.current;
-    if (content) {
-      const rect = content.getBoundingClientRect();
+    let pdf: jsPDF | null = null;
 
-      // Paper size, the font size so small, do make pager size = image size/1.5
-      let width = rect.width;
-      let height = rect.height;
-      let scale = 3;
+    for (let i = 0; i < printElements.current.length; i++) {
+      const printElement = printElements.current[i];
+      if (printElement) {
+        const rect = printElement.getBoundingClientRect();
 
-      if (props.layout.pagerWidth) {
-        width = Number(props.layout.pagerWidth);
+        // Paper size, the font size so small, do make pager size = image size/1.5
+        let width = rect.width;
+        let height = rect.height;
+        let scale = 3;
+
+        if (props.layout.pagerWidth) {
+          width = Number(props.layout.pagerWidth);
+        }
+        if (props.layout.pagerHeight) {
+          height = Number(props.layout.pagerHeight);
+        }
+
+        if (props.layout.scale) {
+          scale = Number(props.layout.scale);
+        }
+        if (!pdf) {
+          pdf = new jsPDF(width > height ? "l" : "p", "px", [width, height]);
+        }
+
+        const canvas = await html2canvas(printElement, { scale });
+        const image = canvas.toDataURL("image/png");
+        if (i === 0) {
+          pdf.addImage(image, "PNG", 0, 0, width, height);
+        } else {
+          const newPage = pdf.addPage([width, height], width > height ? "l" : "p");
+          newPage.addImage(image, "PNG", 0, 0, width, height);
+        }
+
+        // pdf.save("generated.pdf");
       }
-      if (props.layout.pagerHeight) {
-        height = Number(props.layout.pagerHeight);
-      }
+    }
 
-      if (props.layout.scale) {
-        scale = Number(props.layout.scale);
-      }
-
-      const canvas = await html2canvas(content, { scale });
-      const image = canvas.toDataURL("image/png");
-      const pdf = new jsPDF(width > height ? "l" : "p", "px", [width, height]);
-      pdf.addImage(image, "PNG", 0, 0, width, height);
-
-      // const page2 = pdf.addPage([width, height], "l");
-      // page2.addImage(image, "PNG", 0, 0, width, height);
-
-      // pdf.save("generated.pdf");
+    if (pdf) {
       pdf.autoPrint();
 
       const hiddFrame: any = document.createElement("iframe");
@@ -273,9 +315,17 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
             justifyContent: "center",
           }}
         >
-          <div style={{ display: "inline-block" }} ref={printElement}>
-            {renderByData(previewLayout, [])}
-          </div>
+          {data.map((item, index) => {
+            return (
+              <div
+                key={index}
+                style={{ display: "inline-block" }}
+                ref={(el) => (printElements.current[index] = el)}
+              >
+                {renderByData(previewLayout, item, [])}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
