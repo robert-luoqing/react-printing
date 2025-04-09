@@ -12,6 +12,7 @@ export const LabelButton = () => {
         text: "Label",
         display: "inline-block",
         padding: '2px',
+        lineHeight: 1,
         children: [],
       };
       event.dataTransfer.setData("text/plain", JSON.stringify(data));

@@ -55,6 +55,7 @@ export const LabelPreview = (props: LabelPreviewProps) => {
           flexDirection: "row",
           fontSize: elementData?.fontSize,
           fontWeight: elementData?.fontWeight,
+          lineHeight: elementData?.lineHeight || 1,
           justifyContent,
           alignItems,
         }}

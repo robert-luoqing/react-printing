@@ -12,7 +12,7 @@ export interface LabelSettingProps {
 
 export const LabelSetting = (props: LabelSettingProps) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <ContainerSetting
         data={props.data}
         onChange={props.onChange}
@@ -35,6 +35,12 @@ export const LabelSetting = (props: LabelSettingProps) => {
           title="Font Weight"
           tag="fontWeight"
           value={props.data.fontWeight}
+          onChange={props.onChange}
+        />
+        <TextSettingItem
+          title="Line Height"
+          tag="lineHeight"
+          value={props.data.lineHeight}
           onChange={props.onChange}
         />
         <SelectSettingItem

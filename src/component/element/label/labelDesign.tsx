@@ -13,6 +13,7 @@ export interface LabelModel extends ContainerModel {
   fontWeight?: string;
   verticalAlign?: "top" | "center" | "bottom";
   textAlign?: "left" | "right" | "center";
+  lineHeight?: string;
 }
 
 export interface LabelProps extends ComponentProps {
@@ -58,6 +59,7 @@ export const LabelDesign = (props: LabelProps) => {
           flexDirection: 'row',
           fontSize: data?.fontSize,
           fontWeight: data?.fontWeight,
+          lineHeight: data?.lineHeight || 1,
           justifyContent,
           alignItems,
         }}

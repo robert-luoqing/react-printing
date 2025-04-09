@@ -6,6 +6,9 @@ import React from "react";
 
 export interface DivContainerModel extends ContainerModel {
   type: "DivContainer";
+  pagerHeight?: number | string;
+  pagerWidth?: number | string;
+  scale?: number | string;
 }
 
 export interface DivContainerProps extends ComponentProps {

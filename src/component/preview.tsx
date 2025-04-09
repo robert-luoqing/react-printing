@@ -182,10 +182,24 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
     const content = printElement.current;
     if (content) {
       const rect = content.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
 
-      const canvas = await html2canvas(content, { scale: 2 });
+      // Paper size, the font size so small, do make pager size = image size/1.5
+      let width = rect.width;
+      let height = rect.height;
+      let scale = 3;
+
+      if (props.layout.pagerWidth) {
+        width = Number(props.layout.pagerWidth);
+      }
+      if (props.layout.pagerHeight) {
+        height = Number(props.layout.pagerHeight);
+      }
+
+      if (props.layout.scale) {
+        scale = Number(props.layout.scale);
+      }
+
+      const canvas = await html2canvas(content, { scale });
       const image = canvas.toDataURL("image/png");
       const pdf = new jsPDF(width > height ? "l" : "p", "px", [width, height]);
       pdf.addImage(image, "PNG", 0, 0, width, height);

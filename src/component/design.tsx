@@ -343,7 +343,6 @@ export const Design = (props: PrintingDesignProps) => {
             flexDirection: "column",
             alignItems: "center",
             height: "100%",
-            justifyContent: "center",
             overflow: "auto",
           }}
         >
