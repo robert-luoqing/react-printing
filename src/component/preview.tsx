@@ -241,7 +241,10 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
         if (i === 0) {
           pdf.addImage(image, "PNG", 0, 0, width, height);
         } else {
-          const newPage = pdf.addPage([width, height], width > height ? "l" : "p");
+          const newPage = pdf.addPage(
+            [width, height],
+            width > height ? "l" : "p"
+          );
           newPage.addImage(image, "PNG", 0, 0, width, height);
         }
 
@@ -312,7 +315,6 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>((props, ref) => {
             flexDirection: "column",
             alignItems: "center",
             height: "100%",
-            justifyContent: "center",
           }}
         >
           {data.map((item, index) => {
